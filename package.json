@@ -1,0 +1,32 @@
+{
+  "name": "react-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.1.0",
+    "@supabase/auth-helpers-nextjs": "^0.9.0",
+    "@supabase/auth-helpers-react": "^0.4.2",
+    "@supabase/supabase-js": "^2.39.3",
+    "next": "14.1.0",
+    "numbers-only": "^1.0.3",
+    "react": "^18",
+    "react-clickout-ts": "^2023.6.1",
+    "react-dom": "^18",
+    "react-icons": "^5.0.1",
+    "react-redux": "^9.1.0",
+    "recharts": "^2.10.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.0.1",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0"
+  }
+}
