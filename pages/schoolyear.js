@@ -3,11 +3,18 @@ import Header from '@/components/Header'
 import IdInput from '@/components/NumberInput'
 import Layout from '@/components/Layout'
 import React from 'react'
+import Login from './login'
+import { useSession } from '@supabase/auth-helpers-react'
 
 export default function Schoolyear() {
+  const session=useSession();
+  if (!session) {
+    return <Login/>
+    
+  }
   return (
    <Layout>
-     <Header/>
+    
        <div className='flex flex-col gap-4'>
        <Card>
           <div className='flex justify-between p-4'>

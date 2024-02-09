@@ -3,10 +3,12 @@ import DropDawn from "@/components/DropDawn";
 import Header from "@/components/Header";
 import Layout from "@/components/Layout";
 import { useState } from "react";
+import Login from "./login";
+import { useSession } from "@supabase/auth-helpers-react";
 
 
 export default function Setting() {
-  
+  const session=useSession()
     const list=[
         {
             id:1,
@@ -21,13 +23,18 @@ export default function Setting() {
             name:'English'
         },
     ];
+    const[language,setLanguage]=useState(list[1]);
     const[darkMood,setDarkmood]=useState(false);
    const toogleDarkMood=()=>{
     setDarkmood(!darkMood);
    }
+   if (!session) {
+    return <Login/>
+    
+  }
   return (
     <Layout>
-   <Header/>
+  
     <Card>
         <div className="max-w-md">
         <div className='flex flex-col gap-8 p-2'>
@@ -42,7 +49,7 @@ export default function Setting() {
 </svg>
 
         </label>
-         <DropDawn list={list} value={list[1]}/>
+         <DropDawn list={list} value={language} changeValue={setLanguage} />
     </div>
 
     <div className='flex items-center   gap-3 '>

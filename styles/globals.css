@@ -7,7 +7,29 @@
     padding: 0;
 }
 body{
-     
+    @apply bg-secondary
+}
+.pdf-page{
+   
+}
+.pdf-content{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+   
+    align-items: center;
+    font-family: Arial, Helvetica, sans-serif;
+    break-after: always;
+    height: 842pt;
     
+}
+.pdf-content p{
+    font-size: 22px;
     
+
+}
+.pdf-content img{
+    width: 200px;
+    height: 200px;
 }

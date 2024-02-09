@@ -1,78 +1,45 @@
 import Card from '@/components/Card'
 import DropDawn from '@/components/DropDawn'
 import NumberInput from '@/components/NumberInput'
+import { levelsList } from '@/data/heighSchoolLevels'
+import { specialitesList } from '@/data/speciality'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import React, { useEffect, useState } from 'react'
 
 export default function GroupeModel({showModel,refrech}) {
     const session=useSession();
     const supabase=useSupabaseClient();
-    const [groupeId,setGroupeId]=useState();
-    const [groupeNum,setGroupeNum]=useState();
+    const [groupeId,setGroupeId]=useState('');
+    const [groupeNum,setGroupeNum]=useState('');
+    const level=levelsList.find(item=>item.language==='french')?.levels;
+    const speciality=specialitesList.find(speciality=>speciality.language==='french')?.specialites;
+    const [specialites,setSpecialities]=useState(speciality);
+    const [levelDefultValue,setLevelDefultValue]=useState(level[0]);
+    const [specialityDefultValue,setSpecialityDefultValue]=useState(speciality[0][0]);
+    
+
     const addGroupe=()=>{
+      if (groupeId!='' && groupeNum!='') {
         supabase.from('groupe').insert({groupeId:groupeId,groupeNum:groupeNum,instituteId:session.user.id,level:levelDefultValue.id,speciality:specialityDefultValue.id}).then(
             result=>{
               if (result.error) {
                 console.log(result.error)
               }else{
                 showModel(false);
+                refrech()
               }
             }
         )
+      }
     }
-    const levelsList=[
-        {
-         language:'french',
-         levels:[
-             {
-                 id:1,
-                 name:'1er'
-             },
-             {
-                 id:2,
-                 name:'2éme'
-             },
-             {
-                 id:3,
-                 name:'3éme'
-             },
-         ]
-        }
-     ]
-     const specialitesList=[
-         {
-             language:'french',
-             specialites:[
-                 
-                     [
-                         { id: 1, name: 'Science et technologie' },
-                         { id: 2, name: 'Littérature' }
-                     ],
-                     [
-                         { id: 3, name: 'Sciences expérimentales' },
-                         { id: 4, name: 'Littérature et philosophie' },
-                         { id: 5, name: 'Mathématiques' },
-                         { id: 6, name: 'Mathématiques techniques' },
-                         { id: 7, name: 'Langues etrangeres' },
-                         { id: 8, name: 'Gestion et économie' }
-                     ]
-                 
-                 
-             ]
- 
-         }
-     ];
-    const [levelDefultValue,setLevelDefultValue]=useState(levelsList[0].levels[0]);
-    const [specialityDefultValue,setSpecialityDefultValue]=useState(specialitesList[0].specialites[0][0]);
-    const [specialites,setSpecialities]=useState(specialitesList[0].specialites[0]);
     
     useEffect(()=>{
          if(levelDefultValue.id===1){
-          setSpecialityDefultValue(specialitesList[0].specialites[0][0]);
-          setSpecialities(specialitesList[0].specialites[0]);
+          setSpecialityDefultValue(speciality[0][0]);
+          setSpecialities(speciality[0]);
          }else{
-            setSpecialityDefultValue(specialitesList[0].specialites[1][0]);
-            setSpecialities(specialitesList[0].specialites[1]);
+            setSpecialityDefultValue(speciality[1][0]);
+            setSpecialities(speciality[1]);
          }
     },[levelDefultValue])
   return (
@@ -88,7 +55,7 @@ export default function GroupeModel({showModel,refrech}) {
     </div>
          <NumberInput title={"ID"} placeholder={"ID"} number={groupeId} changeNumber={setGroupeId}/>
          <NumberInput title={"numéro de groupe"} placeholder={"numéro de groupe"} number={groupeNum} changeNumber={setGroupeNum}/>
-        <DropDawn list={levelsList[0].levels} value={levelDefultValue} disabled={false} title={"Niveau"} changeValue={setLevelDefultValue}/>
+        <DropDawn list={level} value={levelDefultValue} disabled={false} title={"Niveau"} changeValue={setLevelDefultValue}/>
         <DropDawn list={specialites} value={specialityDefultValue} disabled={false} title={"Specialité"} changeValue={setSpecialityDefultValue}/>
         <button className='bg-primary text-white shadow-md py-2 px-6 text-md  self-center rounded-md ' onClick={addGroupe} >Sauvegarder</button>
     </div>

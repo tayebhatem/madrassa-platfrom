@@ -1,50 +1,108 @@
 import Card from "@/components/Card";
-import Header from "@/components/Header";
 import Layout from "@/components/Layout";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession, useSupabaseClient } from "@supabase/auth-helpers-react";
 import Login from "./login";
-
-import Information from "./information";
+import { checkAccount } from "@/helpers";
 
 export default function Home() {
   const router=useRouter();
-  const pathname=router.pathname;
+  
   const session=useSession();
   const supabase=useSupabaseClient();
-  const [information,setInformation]=useState(false);
-  
-  useEffect(()=>{
+  const [user,setUser]=useState(null)
+  const [teachersNum,setTeachersNum]=useState(0);
+  const [studentsNum,setStudentsNum]=useState(0);
+  const fetchTeachersNum=()=>{
+      
+    if(session){
+     supabase.from('teacher').select('*').eq('instituteId',session.user.id).then(
+       result=>{
+           if (!result.error) {
+               setTeachersNum(result.data.length);
+           }else{
+               console.log(result.error)
 
-     
-    
-  },[])
-  if (!session) {
-    return <Login/>
-  }else{
-    supabase.from('institute').select('*').eq('userId',session.user.id).then(
+           }
+       }
+    )
+    }
+   
+  
+  }
+
+  const fetchStudentsNum=()=>{
+  
+   if(session){
+     supabase.from('student').select('*').eq('instituteId',session.user.id).then(
+       result=>{
+           if (!result.error) {
+               setStudentsNum(result.data.length);
+           }else{
+               console.log(result.error)
+           }
+       }
+    )
+   }
+  
+  }
+  
+   
+   useEffect(()=>{
+
+    const fetchUser=()=>{
+   if(session){
+    supabase.auth.getSession().then(
       result=>{
-        
-        if (result.data===null) {
-        router.push('/information');
-         
+        if(result.error){
+             console.log(result.error)
+        }else{
+          setUser(result.data.session.user)
         }
       }
-    )
+     );
+   }
+      
+     
+    }
+   
+
+    
+   
+     
+    
+    fetchTeachersNum();
+    fetchStudentsNum();
+  
+
+  
+
+   },[])
+  if (!session) {
+    return <Login/>
+    
+  }else{
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event == "PASSWORD_RECOVERY") {
+        console.log('pass')
+       router.push('/resetpassword')
+      }
+    })
+    checkAccount(supabase,router,session.user.id);
+    fetchStudentsNum();
+    fetchTeachersNum();
   }
   return (
-    
-    information?<Information/>:
+
     <Layout>
-  
-    <Header/>
+
     <div className="flex gap-2">
 
     <Card>
     <div className="grow flex justify-between bg-pink-400  rounded-md p-3 text-white">
     <div>
-    <div className="text-4xl font-medium ">200</div>
+    <div className="text-4xl font-medium ">{studentsNum}</div>
       <div className="text-xl my-3">
        Nombre d'étudiants
        </div>
@@ -61,9 +119,9 @@ export default function Home() {
      <Card>
     <div className="grow flex justify-between bg-blue-400  rounded-md p-3 text-white">
     <div>
-    <div className="text-4xl font-medium ">20</div>
+    <div className="text-4xl font-medium ">{teachersNum}</div>
       <div className="text-xl my-3">
-       Nombre d'étudiants
+      Nombre d'enseignants
        </div>
     </div>
 

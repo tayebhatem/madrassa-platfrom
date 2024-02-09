@@ -8,6 +8,8 @@ import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import NumberInput from '@/components/NumberInput'
+import Login from './login'
+import { checkAccount } from '@/helpers'
 
 export default function Account() {
     const levels=[
@@ -29,34 +31,42 @@ const session=useSession();
 const router=useRouter();
     const supabase=useSupabaseClient();
     const[institute,setInstitute]=useState({});
+    const fetchInstitute=()=>{
+      if(session){
+        supabase.from('institute').select('*').eq('userId',session.user.id).single().then(
+          result=>{
+            
+            if (!result.error) {
+             setInstitute(result.data);
+             setLevel(levels.find(level => level.id === result.data.level));
+             
+            }
+          }
+        )
+     }
+      
+     }
     useEffect(()=>{
 
-       const fetchInstitute=()=>{
-        supabase.from('institute').select('*').eq('userId',session.user.id).single().then(
-            result=>{
-              
-              if (!result.error) {
-               setInstitute(result.data);
-               setLevel(levels.find(level => level.id === result.data.level));
-               
-              }
-            }
-          )
-       }
-     if(session){
-        fetchInstitute();
-     }else{
-        router.push('/login')
-     }
+     
+     fetchInstitute()
        
     },[]);
+    if (!session) {
+      return <Login/>
+      
+    }else{
+      checkAccount(supabase,router,session.user.id);
+      fetchInstitute()
+    }
+
   return (
    <Layout>
-   <Header/>
+  
     <Card>
         <div className='flex flex-col gap-2 p-2'>
         <NumberInput number={institute.userId} title={"ID"} disabled={true}/>
-         <NameEnput name={institute.name} disabled={true} title={"nom"}/>
+         <NameEnput name={institute.name} disabled={true} title={"Nom de l'Institut"}/>
         
        
          <DropDawn list={levels} value={level} disabled={true} title={"niveau"}/>

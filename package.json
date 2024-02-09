@@ -13,14 +13,17 @@
     "@supabase/auth-helpers-nextjs": "^0.9.0",
     "@supabase/auth-helpers-react": "^0.4.2",
     "@supabase/supabase-js": "^2.39.3",
+    "html2pdf.js": "^0.10.1",
     "next": "14.1.0",
     "numbers-only": "^1.0.3",
+    "qrcode-generator": "^1.4.4",
     "react": "^18",
     "react-clickout-ts": "^2023.6.1",
     "react-dom": "^18",
     "react-icons": "^5.0.1",
     "react-redux": "^9.1.0",
-    "recharts": "^2.10.4"
+    "recharts": "^2.10.4",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.1",

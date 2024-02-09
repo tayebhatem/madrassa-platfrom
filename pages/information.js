@@ -4,6 +4,7 @@ import NameEnput from '@/components/NameEnput'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import React, { useRef, useState } from 'react'
+import Login from './login';
 
 export default function Information() {
     const levels=[
@@ -38,22 +39,23 @@ export default function Information() {
                 }
             }
          )
-     }else{
-        alert('empty text')
      }
     }
-   
+    if (!session) {
+        return <Login/>
+        
+      }
   return (
     <div className='absolute top-0 left-0  w-full h-full bg-secondary'>
     <div className='max-w-xl mx-auto mt-32 '>
     <Card>
     <div className='flex flex-col gap-2 p-2'>
      
-     <NameEnput name={name} changeName={setName}  />
-     <div className='flex flex-col '>
-    <label className='text-lg capitalize'>niveau</label>
-     <DropDawn list={levels} value={level} changeValue={setLevel}/>
-    </div>
+     <NameEnput name={name} changeName={setName} title={"Nom de l'Institut"}  />
+   
+   
+     <DropDawn list={levels} value={level} changeValue={setLevel} title={'niveau'}/>
+  
     <div className='flex flex-col '>
     <label className='text-lg  capitalize'>adresse</label>
     <textarea type='text' placeholder='Adress....' ref={adress} className='bg-gray-100 p-2 rounded-md text-gray-500 outline-none resize-none h-24 border'/>

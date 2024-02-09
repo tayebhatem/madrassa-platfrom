@@ -5,10 +5,14 @@ import Layout from '@/components/Layout'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { subjects } from '@/data/subjects'
 import React, { useEffect, useState } from 'react'
+import Login from './login'
+import { useRouter } from 'next/router'
+import { checkAccount } from '@/helpers'
 
 export default function Teacher() {
     const supabase=useSupabaseClient();
     const session=useSession();
+    const router=useRouter()
     const [showModel, setShowModel] = useState(false);
     const list = subjects.find(subject => subject.language === 'french').subjects;
     const [teachers,setTeachers]=useState([]);
@@ -38,7 +42,8 @@ export default function Teacher() {
 
     }
     const fetchTeachers=()=>{
-     supabase.from('teacher').select('*').eq('instituteId',session.user.id).then(
+     if(session){
+      supabase.from('teacher').select('*').eq('instituteId',session.user.id).then(
         result=>{
             if (!result.error) {
                 setTeachers(result.data);
@@ -47,11 +52,19 @@ export default function Teacher() {
             }
         }
      )
+     }
     }
     useEffect(()=>{
        fetchTeachers();
 
     },[])
+    if (!session) {
+      return <Login/>
+      
+    }else{
+      checkAccount(supabase,router,session.user.id);
+      fetchTeachers()
+    }
   return (
    <>
      {
@@ -64,7 +77,7 @@ export default function Teacher() {
       </>
      }
     <Layout>
-        <Header/>
+       
        <div className='flex flex-col gap-4'>
        <Card>
           <div className='flex justify-between p-4'>
@@ -73,7 +86,7 @@ export default function Teacher() {
           </div>
         </Card>
         <Card>
-        <div className='p-3'>
+        <div className='p-3 '>
         <div className='bg-gray-100 rounded-md p-2 flex gap-1 max-w-sm mb-4'>
             <input type='text' className='grow bg-transparent outline-none'  onChange={handleSearch}/>
             <div className='text-gray-400'>
@@ -83,13 +96,15 @@ export default function Teacher() {
             </div>
 
         </div>
-           <table className='w-full h-28  overflow-scroll'>
+           <div className='overflow-auto max-h-96'>
+           <table className='w-full'>
             <thead className='font-bold bg-gray-100 '>
                 <tr >
                 <td className='capitalize p-2'>ID</td>
                     <td className='capitalize p-2'>nom</td>
                     <td className='capitalize p-2'>prénom</td>
                     <td className='capitalize p-2'>matiere</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -103,6 +118,15 @@ export default function Teacher() {
                     <td className='capitalize p-2 font-medium truncate max-w-36'>{teacher.lastname}</td>
                     <td className='capitalize p-2 font-medium truncate max-w-36'>{teacher.firstname}</td>
                     <td className='capitalize p-2 font-medium truncate max-w-36'>{list.find(subject=>subject.id===teacher.subject)?.name}</td>
+                    <td>
+                    <button onClick={()=>router.push('/schedule?id='+teacher.teacherId)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 0 0 0-1.5h-3.75V6Z" clipRule="evenodd" />
+                     </svg>
+
+                    </button>
+
+                  </td>
                     <td>
                     <button onClick={()=>deleteTeacher(teacher.teacherId)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
@@ -129,6 +153,7 @@ export default function Teacher() {
                
             </tbody>
            </table>
+           </div>
         </div>
         </Card>
        </div>
