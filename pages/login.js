@@ -15,6 +15,9 @@ export default function Login() {
     const router=useRouter();
     const[email,setEmail]=useState('');
     const[password,setPassword]=useState('');
+    const[emptyEmail,setEmptyEmail]=useState(false);
+    const[emptyPassword,setEmptyPasword]=useState(false);
+    const[wrongUser,setwrongUser]=useState(false);
 
     const loginWithGoogle=()=>{
         supabase.auth.signInWithOAuth({
@@ -24,13 +27,15 @@ export default function Login() {
     }
     async function signInWithEmail() {
        if(email!=='' && password!==''){
+        
         await supabase.auth.signInWithPassword({
             email: email,
             password: password
           }).then(
             result=>{
               if(result.error){
-                alert(result.error.message)
+                result.error.message==='Invalid login credentials'? setwrongUser(true):setwrongUser(false)
+                
               }else{
                 if(session){
                   router.push('/')
@@ -39,6 +44,19 @@ export default function Login() {
             }
           )
        }
+       if(email.length===0){
+        setEmptyEmail(true);
+        
+       }else{
+         setEmptyPasword(false);
+       }
+       
+       if(password.length===0){
+         setEmptyPasword(true);
+         
+        }else{
+         setEmptyPasword(false);
+        }
       }
       
   return (
@@ -47,12 +65,13 @@ export default function Login() {
        <Card>
         <div className='flex flex-col gap-3 p-4'>
         <h2 className='text-center text-2xl font-semibold'>Se connecter</h2>
-         <Email changeEmail={setEmail}/>
-         <Password changeValue={setPassword} placeholder={"Mot de passe"} />
+         <Email changeEmail={setEmail} isEmpty={emptyEmail}/>
+         <Password changeValue={setPassword} placeholder={"Mot de passe"} isEmpty={emptyPassword} />
          <Link href="/sendmail" className='text-primary font-medium'>Mot de passe oublié ?</Link>
          <button className='bg-primary text-white shadow-md py-2 px-6 text-md  self-center rounded-md ' onClick={signInWithEmail} >Se connecter</button>
+         {wrongUser && <div className='text-center text-red-500'>Mauvais email ou mot de passe !</div>}
          <div  className='text-center text-md'>
-         vous n'avez pas de compte ? <Link href="/register" className='text-primary font-semibold'>s'inscrire</Link>
+         vous n'avez pas de compte ? <Link href="/register" className='text-primary font-semibold'>S'inscrire</Link>
          </div>
        <div className='flex flex-col gap-2'>
        <button className='flex gap-2 items-center border rounded-md p-2 text-lg justify-center' onClick={loginWithGoogle}>
