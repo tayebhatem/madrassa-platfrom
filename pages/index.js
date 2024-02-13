@@ -104,7 +104,7 @@ export default function Home() {
     <div>
     <div className="text-4xl font-medium ">{studentsNum}</div>
       <div className="text-xl my-3">
-       Nombre d'étudiants
+       Nombre d étudiants
        </div>
     </div>
 
@@ -121,7 +121,7 @@ export default function Home() {
     <div>
     <div className="text-4xl font-medium ">{teachersNum}</div>
       <div className="text-xl my-3">
-      Nombre d'enseignants
+      Nombre d enseignants
        </div>
     </div>
 

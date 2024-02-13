@@ -71,7 +71,7 @@ export default function Login() {
          <button className='bg-primary text-white shadow-md py-2 px-6 text-md  self-center rounded-md ' onClick={signInWithEmail} >Se connecter</button>
          {wrongUser && <div className='text-center text-red-500'>Mauvais email ou mot de passe !</div>}
          <div  className='text-center text-md'>
-         vous n'avez pas de compte ? <Link href="/register" className='text-primary font-semibold'>S'inscrire</Link>
+         vous n avez pas de compte ? <Link href="/register" className='text-primary font-semibold'>Inscrire</Link>
          </div>
        <div className='flex flex-col gap-2'>
        <button className='flex gap-2 items-center border rounded-md p-2 text-lg justify-center' onClick={loginWithGoogle}>
