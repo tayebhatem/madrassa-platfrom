@@ -178,7 +178,6 @@ const handleSearch=(e)=>{
     
   };
   const fetchStudents=()=>{
-   try {
     if(session){
       supabase.from('student').select('*').eq('groupeId',id).then(
         result=>{
@@ -188,14 +187,10 @@ const handleSearch=(e)=>{
         }
       )
     }
-   } catch (error) {
-    
-   }
   }
  
   const fetchGroupe=()=>{
- try {
-  if(session){
+   if(session){
     supabase.from('groupe').select('*').eq('groupeId',id).single().then(
       result=>{
           if (!result.error) {
@@ -207,9 +202,6 @@ const handleSearch=(e)=>{
       }
    )
    }
- } catch (error) {
-  
- }
    }
   useEffect(()=>{
    
