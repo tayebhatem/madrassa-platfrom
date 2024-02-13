@@ -56,7 +56,7 @@ if (email!=='') {
     <div className='max-w-sm mx-auto mt-52 '>
     <Card>
      <div className='flex flex-col gap-3 p-4'>
-     <h2 className='text-center text-3xl font-semibold'>Détails de l'email </h2>
+     <h2 className='text-center text-3xl font-semibold'>Détails de lemail </h2>
      <p className='text-gray-400 text-center'>Entrez votre email pour envoyer le lien de réinitialisation du mot de passe</p>
       <Email changeEmail={setEmail} isEmpty={emptyEmail}/>
      
