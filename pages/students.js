@@ -3,7 +3,7 @@ import Layout from '@/components/Layout'
 import { useSession, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router'
 import * as XLSX from 'xlsx';
-import html2pdf from "html2pdf.js";
+
 import QRCode from 'qrcode-generator';
 import React, { useEffect, useState } from 'react'
 import { levelsList } from '@/data/heighSchoolLevels';
@@ -33,71 +33,19 @@ export default function Students() {
  const printStudents =  () => {
   setLoading(true);
   try {
-    let mergedContent = '<html><head></head><body >'; 
-    for (const student of students) {
-     
- const qrImage = generateGrCode(student.studentId); ; 
-      const content = `
-      <div class="pdf-page">
-      <div class="pdf-content">
-      <p >Matricule : ${student.studentId}</p>
-      <p >Nom : ${student.lastname}</p>
-      <p >Prénom : ${student.firstname}</p>
-      <p >Date de naissance : ${student.birthdate}</p>
-      <p >Classe :${levels.find(level=>level.id===groupe.level)?.name} ${specialites.flatMap(item=>item).find(speciality=>speciality.id===groupe.speciality)?.name} ${groupe.groupeNum}</p> 
-      <img  src="${qrImage}" />
-    </div>
-    <div>`;
-      mergedContent += content; 
-    }
-    mergedContent += '</body></html>'; 
-    html2pdf()
-.from(mergedContent)
-.outputPdf('blob') 
-.then((pdfBlob) => {
-  const blobURL = URL.createObjectURL(pdfBlob);
-  const printWindow = window.open(blobURL);
-  if (printWindow) {
-    printWindow.onload = () => {
-      printWindow.print(); 
-      setLoading(false);
-    };
-  } else {
-    console.error('Failed to open print window.');
-  }
-});
+  
   } catch (err) {
     console.error(err);
   }
 };
 
  const handlePrintStudent = (student) => {
-  const qrImage = generateGrCode(student.studentId); 
-  const content = `
-    <div class="pdf-content">
-      <p >Matricule : ${student.studentId}</p>
-      <p >Nom : ${student.lastname}</p>
-      <p >Prénom : ${student.firstname}</p>
-      <p >Date de naissance : ${student.birthdate}</p>
-      <p >Classe :${levels.find(level=>level.id===groupe.level)?.name} ${specialites.flatMap(item=>item).find(speciality=>speciality.id===groupe.speciality)?.name} ${groupe.groupeNum}</p>
-      <img  src="${qrImage}" />
-    </div>`;
-  html2pdf()
-    .from(content)
-    .outputPdf('blob') // Generate a Blob object
-    .then((pdfBlob) => {
-      const blobURL = URL.createObjectURL(pdfBlob);
-      const printWindow = window.open(blobURL);
-      if (printWindow) {
-        printWindow.onload = () => {
-          printWindow.print(); // Print the PDF
-       
-        };
-      } else {
-        console.error('Failed to open print window.');
-      }
-    });
+  try {
+  
 
+  } catch (error) {
+    
+  }
 };
  const deleteStudent=(id)=>{
   supabase.from('student').delete().eq('studentId',id).then(
@@ -178,6 +126,7 @@ const handleSearch=(e)=>{
     
   };
   const fetchStudents=()=>{
+   try {
     if(session){
       supabase.from('student').select('*').eq('groupeId',id).then(
         result=>{
@@ -187,10 +136,14 @@ const handleSearch=(e)=>{
         }
       )
     }
+   } catch (error) {
+    
+   }
   }
  
   const fetchGroupe=()=>{
-   if(session){
+ try {
+  if(session){
     supabase.from('groupe').select('*').eq('groupeId',id).single().then(
       result=>{
           if (!result.error) {
@@ -202,6 +155,9 @@ const handleSearch=(e)=>{
       }
    )
    }
+ } catch (error) {
+  
+ }
    }
   useEffect(()=>{
    

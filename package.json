@@ -20,6 +20,7 @@
     "react": "^18",
     "react-clickout-ts": "^2023.6.1",
     "react-dom": "^18",
+    "react-html2pdf": "^1.0.1",
     "react-icons": "^5.0.1",
     "react-notifications": "^1.7.4",
     "react-redux": "^9.1.0",
