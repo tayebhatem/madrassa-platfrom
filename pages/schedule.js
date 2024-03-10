@@ -39,7 +39,7 @@ export default function Schedule() {
         )
     }
     useEffect(()=>{
-      fetchSchedule()
+      fetchSchedule();
     },[])
     if (!session) {
         return <Login/>
@@ -69,7 +69,7 @@ export default function Schedule() {
         </Card>
 
         <Card>
-        <div className='p-3 overflow-auto max-h-96'>
+        <div className='p-3 overflow-auto max-h-96 '>
         <div className='bg-gray-100 rounded-md p-2 flex gap-1 max-w-sm mb-4'>
             <input type='text' className='grow bg-transparent outline-none' />
             <div className='text-gray-400'>

@@ -79,10 +79,7 @@ export default function Login() {
         Connectez vous avec Google
         </button>
 
-        <button className='flex gap-2 items-center border rounded-md p-2 text-lg justify-center'>
-        <FaFacebook className='text-3xl text-[#316FF6]'/>
-        Connectez vous avec Facebook
-        </button>
+       
        </div>
         </div>
     </Card>

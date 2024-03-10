@@ -66,7 +66,7 @@ const router=useRouter();
     <Card>
         <div className='flex flex-col gap-2 p-2'>
         <NumberInput number={institute.userId} title={"ID"} disabled={true}/>
-         <NameEnput name={institute.name} disabled={true} title={"Nom de l'Institut"}/>
+         <NameEnput name={institute.name} disabled={true} title={"Nom"}/>
         
        
          <DropDawn list={levels} value={level} disabled={true} title={"niveau"}/>
