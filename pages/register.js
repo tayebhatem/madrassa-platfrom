@@ -4,7 +4,6 @@ import Password from '@/components/Password'
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { FaFacebook } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
